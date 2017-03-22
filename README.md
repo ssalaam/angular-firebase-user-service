@@ -16,6 +16,11 @@ and import into your project
 
 ## Usage
  [Heres a demo](http://adeayo.me/github/user-service/)
+ 
+ Add as a dependency  
+```javascript
+   angular.module('myApp', ['ssalam.user-service'])
+```
 
 
 **License:** [GPLv2](https://github.com/owncloud/android/blob/master/LICENSE.txt)
