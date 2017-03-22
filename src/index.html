@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html ng-app="myApp" ng-controller="homeCtrl">
+    
+         <script src='//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+        
+        <script src="https://www.gstatic.com/firebasejs/3.7.3/firebase.js"></script>
+        
+        
+        <script src="//use.fontawesome.com/281f829588.js"></script>
+
+
+        <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyDPezeZL78ke3Z5RyaidQkMtAZS0vXHTDE&libraries=places&sensor=false"></script>
+        <script type="text/javascript" src="assets/js/angular-google-maps.min.js"></script>
+        <link href="assets/css/angular-material-custom.css" rel="stylesheet" type="text/css"/>
+        <script src="assets/js/angular-material-custom.js" type="text/javascript"></script>
+        
+        <link rel="stylesheet" href="assets/css/json-formatter.css">
+       <script type="text/javascript" src="assets/js/json-formatter.js"></script>
+
+        
+        <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+        <script src="assets/js/build/user-service-firebase.js" type="text/javascript"></script>
+        
+        <script src="app/app.js" type="text/javascript"></script>
+          <script src="controllers/homeCtrl.js" type="text/javascript"></script>
+          
+          
+<style>
+
+.largecircleimage {
+    width: 100px; 
+    height: 100px; 
+    border-radius: 50%;
+}
+.decorated{
+     overflow: hidden;
+     text-align: center;
+ }
+.decorated > span{
+    position: relative;
+    display: inline-block;
+}
+.decorated > span:before, .decorated > span:after{
+    content: '';
+    position: absolute;
+    top: 50%;
+    border-bottom: 2px solid;
+    width: 100px; /* half of limiter*/
+    margin: 0 20px;
+}
+.decorated > span:before{
+    right: 100%;
+}
+.decorated > span:after{
+    left: 100%;
+}
+
+
+    .github{
+        background-color: #24292e !important;
+    }
+    
+    .google{
+        background-color: #4285f4 !important;
+    }
+    
+    md-toolbar{
+        box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 0px 2px 2px rgba(0, 0, 0, 0.098), 0px 0px 5px 1px rgba(0, 0, 0, 0.084);
+        position:fixed;
+        top: 0;
+    }
+    .gray {
+        color:gray !important;
+    }
+</style>
+<body>
+    
+
+<div>
+    
+    <md-toolbar class="md-primary">
+      <div class="md-toolbar-tools">
+          
+        <span>User Service Demo</span>
+        
+      <span flex=""></span>
+      
+        <span ng-if="signedIn && init">
+            
+            <md-button ng-click="signOut()" ><md-icon><i class="material-icons">keyboard_backspace</i> </md-icon>Sign Out</md-button>
+ 
+       </span>
+      
+              
+          <md-button  class="md-raised md-accent round" >
+           <i class="fa fa-github" aria-hidden="true"></i> Github 
+          </md-button>
+      
+      
+      </div> 
+    </md-toolbar>
+
+    <div style="height:100%;width:100%;padding-top:95px;padding-left:5%;padding-right:5%;">
+        
+     <div layout="row">
+         
+         <div flex="50"  ng-if="signedIn && init"> 
+         <span class="md-display-1">Logged in as: </span>
+         
+         <br><br>
+                     <img  style="display: block;" class="largecircleimage" ng-src="{{photoURL || 'http://res.cloudinary.com/veedbeta/image/upload/v1490184839/placeholder_gyolnw.jpg'}}" err-src="http://res.cloudinary.com/veedbeta/image/upload/v1490184839/placeholder_gyolnw.jpg" ng-cloak/>
+        <br>
+               <span class="md-title gray"> {{displayName}}</span>
+               <br>
+               <small class=" gray"> {{email}}</small>
+         </div>
+         
+        <div flex="50"  ng-if="!signedIn && init">
+           <p> 
+               
+               <span class="md-display-1">Log In</span>
+               <br><br>
+               <span class="md-title gray"> Test authentication with each of these providers and watch the data stored </span>
+           </p>
+           <md-button class="md-raised md-accent google" ng-click="authGoogle()"> <i class="fa fa-google" aria-hidden="true"></i> GOOGLE </md-button> 
+            <md-button class="md-raised md-primary github" ng-click="authGithub()" ><i class="fa fa-github" aria-hidden="true"></i> GITHUB </md-button> 
+            <md-button class="md-raised md-accent facebook" ng-click="authFacebook()"> <i class="fa fa-google" aria-hidden="true"></i> FACEBOOK </md-button> 
+            <md-button class="md-raised md-primary twitter" ng-click="authTwitter()" ><i class="fa fa-github" aria-hidden="true"></i> TWITTER </md-button> 
+            
+            
+            <p class="md-display-1">OR</p>
+            
+          <md-input-container  style="margin: 0px !important;">
+          <label>Email</label>
+          <input  name="email" ng-model="data.login.email" type='email' style="margin: 0px !important;"/>
+
+          <div ng-messages="userForm.email.$error">
+          </div>
+        </md-input-container>
+            
+            <br>
+        
+        <md-input-container  style="margin: 0px !important;">
+          <label>Password</label>
+          <input name="password" ng-model="data.login.password" type='password' style="margin: 0px !important;"/>
+          <div ng-messages="userForm.password.$error">
+          </div>
+        </md-input-container>
+            
+            <br>
+        
+        <md-button ng-click="authEmail()" class="md-raised md-primary" style="margin: 0px !important;margin-bottom: 5px !important;">Log In</md-button>
+            
+        <br><br>
+        
+        <md-divider></md-divider>
+        
+        <br> <br>
+        
+        <form name="userForm">
+        <md-input-container  style="margin: 0px !important;">
+          <label>Name</label>
+          <input  required name="name" ng-model="data.signup.name" type='name'/>
+
+          <div ng-messages="userForm.name.$error">
+          </div>
+        </md-input-container>
+        
+            <br>
+        
+         <md-input-container style="margin: 0px !important;">
+          <label>Email</label>
+          <input  required name="email" ng-model="data.signup.email" type='email'/>
+
+          <div ng-messages="userForm.email.$error">
+          </div>
+        </md-input-container>
+        
+            <br>
+            
+        <md-input-container style="margin: 0px !important;">
+          <label>Password</label>
+          <input required name="password" ng-model="data.password" type='password'/>
+          <div ng-messages="userForm.password.$error">
+          </div>
+          
+                 <md-icon style="cursor:pointer;"><md-tooltip md-direction="left">{{data.password}}</md-tooltip>
+                <i class="material-icons">remove_red_eye</i></md-icon>
+
+        </md-input-container>
+        
+        </form>
+        
+       <md-button ng-click="signupEmail(userForm.$valid)" class="md-raised md-primary" >Sign Up</md-button>
+                
+        </div>
+        
+        <div flex="50">
+            
+            <p>
+            <span class="md-display-1">Firebase data</span>
+              <br><br>
+             <span class="md-title gray"> This is how the data looks in firebase real time</span>
+             <br>
+            </p>
+      <json-formatter json="data.users" open="3"></json-formatter>
+        </div>
+        
+    </div>
+
+        
+        
+        
+        
+</div>
+    
+    
+
+
+
+</div>
+
+
+</body>
+</html>
