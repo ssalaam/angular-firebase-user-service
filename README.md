@@ -34,7 +34,7 @@ Intialize firebase ([steps here]( https://firebase.google.com/docs/web/setup ) )
  .run([ function() {
                    var config = {
                    apiKey: "YOUR API KEY",
-                   authDomain: YOUR DOMAIN",
+                   authDomain: "YOUR DOMAIN",
                    databaseURL: "YOUR DATABASE URL"
                  };
                   
@@ -46,12 +46,12 @@ Enable all relevant auth methods in firebase console
 ![](http://res.cloudinary.com/veedbeta/image/upload/v1490188832/firebasescreen_oqv4an.png)
 
  ## Usage
- To create new account with email and password 
+ ### To create new account with email and password 
 ```javascript
     UserService.SignUpWithEmail("SOME EMAIL","SOME PASSWORD","SOME PROFILE IMAGE", "SOME USER NAME", function (response) {
 
                   if (response.success) {
-                                
+                                 //success 
                   } else {
                       
                       console.log(response);
@@ -71,23 +71,26 @@ Enable all relevant auth methods in firebase console
                   }
             });
 ```
-Firebase will save new users data under "users" object
+### Firebase will save new users data under "users" object
 ```json
-{
-  "displayName" : "Ade Efunbukola",
-  "email" : "adeayoolu@gmail.com",
+users:{
+  "displayName" : "John Smith",
+  "email" : "blahblah@gmail.com",
   "photoURL" : "https://scontent.xx.fbcdn.net/v/t1.0-1/p100x100/10509525_297120603803706_2687166474084629318_n.jpg?oh=12cc14a6684b1ff506d40c0e51721179&oe=5963F98A",
   "uid" : "pfb7HcLrG3arzYDRjgkBeqcpBax2"
 }
 
 ```
 
-To log in via email and password 
+
+
+### To log in via email and password 
 ```javascript
    UserService.LogInWithEmail("SOME EMAIL","SOME PASSWORD", function (response) {
                
                   if (response.success) {
               
+               //success 
                                   
                   } else {
                       console.log(response);
@@ -112,6 +115,40 @@ To log in via email and password
                   }
             });
 ```
+
+
+### To authenticate via social media providers 
+```javascript
+    UserService.LogInWithGoogle(function (response) {
+                  if (response.success) {
+                     //success            
+                  } else {
+         
+                      switch(response.code) {
+                                case 'auth/account-exists-with-different-credential':
+                                    //An exisiting account is already authenticated using " + response.email + " but with a different provider. (This usssually happens is your have signed in with a different service that uses the same email address."
+                                   
+                                    break;
+                                case 'auth/popup-blocked':
+                                    //"Whoops looks like your browser has blocked pop ups! Enabled pop ups to sign in with google"                               
+                                    break;
+                                case 'auth/popup-closed-by-user':
+                                 //"Whoops looks like you didn't complete the authentication process";                                 
+                                    break;  
+                                default:
+                                    //Looks like an error has occured
+                            }
+ 
+                  }
+            });
+    };
+    
+    UserService.LogInWithTwitter (function (response)...
+    UserService.LogInWithFacebook (function (response)...
+    UserService.LogInWithGithub function (response)...
+```
+
+#### If there is no exsitng user with these credentials stored the data will be stored in firebase as shown above 
 
         
 
