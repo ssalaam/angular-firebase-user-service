@@ -74,10 +74,18 @@ Enable all relevant auth methods in firebase console
 ### Firebase will save new users data under "users" object
 ```json
 users:{
-  "displayName" : "John Smith",
-  "email" : "blahblah@gmail.com",
-  "photoURL" : "https://scontent.xx.fbcdn.net/v/t1.0-1/p100x100/10509525_297120603803706_2687166474084629318_n.jpg?oh=12cc14a6684b1ff506d40c0e51721179&oe=5963F98A",
-  "uid" : "pfb7HcLrG3arzYDRjgkBeqcpBax2"
+   -k2sy2sYz :{
+     "displayName" : "John Smith",
+     "email" : "blahblah@gmail.com",
+     "photoURL" : "https://scontent.xx.fbcdn.net/v/t1.0-1/p100x100/10509525_297120603803706_2687166474084629318_n.jpg?     oh=12cc14a6684b1ff506d40c0e51721179&oe=5963F98A",
+     "uid" : "pfb7HcLrG3arzYDRjgkBeqcpBax2"
+   },
+      -k23dsr4k9 :{
+     "displayName" : "Jane Smith",
+     "email" : "blahblah@gmail.com",
+     "photoURL" : "https://scontent.xx.fbcdn.net/v/t1.0-1/p100x100/10509525_297120603803706_2687166474084629318_n.jpg?     oh=12cc14a6684b1ff506d40c0e51721179&oe=5963F98A",
+     "uid" : "pf33ejskwl3imdnekrke89"
+   }
 }
 
 ```
