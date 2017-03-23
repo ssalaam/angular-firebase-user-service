@@ -156,7 +156,7 @@ users:{
     UserService.LogInWithGithub function (response)...
 ```
 
-#### If there is no exsitng user with these credentials stored the data will be stored in firebase as shown above 
+#### If there is no exsitng user with these credentials the data will be stored in firebase as shown in previous example 
 
         
 
